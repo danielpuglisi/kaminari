@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # require 'rails/all'
 require 'action_controller/railtie'
 require 'action_view/railtie'
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
   end
 end
 
-#models
+# models
 require 'fake_app/active_record/models' if defined? ActiveRecord
 
 # controllers
@@ -64,12 +65,12 @@ end
 Object.const_set(:ApplicationHelper, Module.new)
 
 module CustomRoutesHelper
-  def posts_path(params={})
+  def posts_path(params = {})
     page = params.delete(:page)
     if page
       "/posts/page/#{page}"
     else
-      "/posts"
+      '/posts'
     end
   end
 end

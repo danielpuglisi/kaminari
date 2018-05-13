@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 module Kaminari
   module Helpers
-    PARAM_KEY_BLACKLIST = [:authenticity_token, :commit, :utf8, :_method, :script_name].freeze
+    PARAM_KEY_BLACKLIST = %i[authenticity_token commit utf8 _method script_name].freeze
 
     # A tag stands for an HTML tag inside the paginator.
     # Basically, a tag has its own partial template file, so every tag can be
@@ -17,7 +18,10 @@ module Kaminari
     #   e.g.)  Paginator  ->  $GEM_HOME/kaminari-x.x.x/app/views/kaminari/_paginator.html.erb
     class Tag
       def initialize(template, params: {}, param_name: nil, theme: nil, views_prefix: nil, **options) #:nodoc:
-        @template, @theme, @views_prefix, @options = template, theme, views_prefix, options
+        @template = template
+        @theme = theme
+        @views_prefix = views_prefix
+        @options = options
         @param_name = param_name || Kaminari.config.param_name
         @route  = @options.delete(:route)
         @params = template.params
@@ -58,7 +62,7 @@ module Kaminari
           #   from: {other: "params", user: {name: "yuki", page: 1}}
           #     to: {other: "params", user: {name: "yuki", page: nil}}
           #   (when @param_name == "user[page]")
-          @param_name.to_s.scan(/[\w\.]+/)[0..-2].inject(page_params){|h, k| h[k] }[$&] = nil
+          @param_name.to_s.scan(/[\w\.]+/)[0..-2].inject(page_params) { |h, k| h[k] }[$&] = nil
         end
 
         page_params
@@ -66,11 +70,11 @@ module Kaminari
 
       def partial_path
         [
-         @views_prefix,
-         "kaminari",
-         @theme,
-         self.class.name.demodulize.underscore
-        ].compact.join("/")
+          @views_prefix,
+          'kaminari',
+          @theme,
+          self.class.name.demodulize.underscore
+        ].compact.join('/')
       end
     end
 
@@ -80,10 +84,12 @@ module Kaminari
       def page
         raise 'Override page with the actual page value to be a Page.'
       end
+
       # the link's href
       def url
         page_url_for page
       end
+
       def to_s(locals = {}) #:nodoc:
         locals[:url] = url
         super locals
@@ -97,6 +103,7 @@ module Kaminari
       def page
         @options[:page]
       end
+
       def to_s(locals = {}) #:nodoc:
         locals[:page] = page
         super locals

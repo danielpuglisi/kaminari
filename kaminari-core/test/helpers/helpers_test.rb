@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class PaginatorHelperTest < ActiveSupport::TestCase
@@ -9,7 +10,7 @@ class PaginatorHelperTest < ActiveSupport::TestCase
       render.with_any_args
       params { {} }
       options { {} }
-      url_for {|h| "/foo?page=#{h[:page]}"}
+      url_for { |h| "/foo?page=#{h[:page]}" }
       link_to { "<a href='#'>link</a>" }
       output_buffer { defined?(ActionView) ? ::ActionView::OutputBuffer.new : ::ActiveSupport::SafeBuffer.new }
     end
@@ -23,19 +24,19 @@ class PaginatorHelperTest < ActiveSupport::TestCase
 
   sub_test_case '#params' do
     setup do
-      @paginator = Paginator.new(template, params: {controller: 'foo', action: 'bar'})
+      @paginator = Paginator.new(template, params: { controller: 'foo', action: 'bar' })
     end
 
     test 'when params has no form params' do
-      assert_equal({'controller' => 'foo', 'action' => 'bar'}, @paginator.page_tag(template).instance_variable_get('@params'))
+      assert_equal({ 'controller' => 'foo', 'action' => 'bar' }, @paginator.page_tag(template).instance_variable_get('@params'))
     end
 
     test 'when params has form params' do
       stub(template).params do
-        {authenticity_token: 'token', commit: 'submit', utf8: 'true', _method: 'patch'}
+        { authenticity_token: 'token', commit: 'submit', utf8: 'true', _method: 'patch' }
       end
 
-      assert_equal({'controller' => 'foo', 'action' => 'bar'}, @paginator.page_tag(template).instance_variable_get('@params'))
+      assert_equal({ 'controller' => 'foo', 'action' => 'bar' }, @paginator.page_tag(template).instance_variable_get('@params'))
     end
   end
 
